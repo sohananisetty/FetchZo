@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,7 +39,9 @@ public class MainScreen extends AppCompatActivity {
     FirebaseFirestore fStore;
     String userId;
     LatLng loc;
-    static ArrayList<LatLng> locations = new ArrayList<LatLng>();
+    //static ArrayList<LatLng> locations = new ArrayList<LatLng>();
+    static ArrayList<Location> locations = new ArrayList<Location>();
+
 
     public void search(View view){
         Toast.makeText(this,"Searching for nearby owners",Toast.LENGTH_SHORT).show();
@@ -51,8 +54,12 @@ public class MainScreen extends AppCompatActivity {
                         if(document.exists() && document!=null) {
                             double lat = document.getDouble("latitude");
                             double lng = document.getDouble("longitude");
-                            loc = new LatLng(lat, lng);
-                            locations.add(loc);
+                            //loc = new LatLng(lat, lng);
+                            //locations.add(loc);
+                            Location temp = new Location(LocationManager.GPS_PROVIDER);
+                            temp.setLatitude(lat);
+                            temp.setLongitude(lng);
+                            locations.add(temp);
                             String location = Double.toString(lat) + " " + Double.toString(lng);
                             Log.i("loc", location);
                             Toast.makeText(MainScreen.this,location,Toast.LENGTH_SHORT).show();

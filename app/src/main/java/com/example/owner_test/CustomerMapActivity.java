@@ -86,10 +86,14 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
 
     public void showNearest(View view){
         for(int i=0;i<MainScreen.locations.size();i++) {
-
+            LatLng ownerLocation = new LatLng(MainScreen.locations.get(i).getLatitude(), MainScreen.locations.get(i).getLongitude());
             //Toast.makeText(this,"adding marker " + i+"/"+MainScreen.locations.size(),Toast.LENGTH_SHORT).show();
             Log.i("TAG","adding marker " + i +"/"+ MainScreen.locations.size());
-            mMap.addMarker(new MarkerOptions().position(MainScreen.locations.get(i)).title(getAddress(MainScreen.locations.get(i))));
+            //mMap.addMarker(new MarkerOptions().position(MainScreen.locations.get(i)).title(getAddress(MainScreen.locations.get(i))));
+            if(lastKnownLocation.distanceTo(MainScreen.locations.get(i)) < 1000){
+                mMap.addMarker(new MarkerOptions().position(ownerLocation).title(getAddress(ownerLocation)));
+            }
+
         }
     }
 
