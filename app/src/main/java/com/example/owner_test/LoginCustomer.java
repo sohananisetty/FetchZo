@@ -64,14 +64,26 @@ public class LoginCustomer extends AppCompatActivity {
 
     public void register(View view) {
         String oPassword = password.getText().toString();
-        String oEmail = email.getText().toString();
-        String oName = name.getText().toString().trim();
+        final String oEmail = email.getText().toString();
+        final String oName = name.getText().toString().trim();
         progressBar.setVisibility(View.VISIBLE);
         fAuth.createUserWithEmailAndPassword(oEmail,oPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
                     Toast.makeText(LoginCustomer.this, "User created", Toast.LENGTH_LONG).show();
+                    userId = fAuth.getCurrentUser().getUid();
+                    DocumentReference documentReference = fStore.collection("Customers").document(userId);
+                    Map<String,Object> customer = new HashMap<>();
+                    customer.put("name",oName);
+                    customer.put("email",oEmail);
+                    documentReference.set(customer).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("TAG","Success "+ userId);
+                        }
+
+                    });
                 }
                 else{
                     Toast.makeText(LoginCustomer.this,"failed to create database",Toast.LENGTH_SHORT).show();

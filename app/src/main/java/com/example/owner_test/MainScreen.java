@@ -5,6 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -33,18 +37,99 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class MainScreen extends AppCompatActivity {
 
+    private static final int REQUEST_ENABLE_BT = 1;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userId;
     LatLng loc;
-    //BluetoothAdapter bluetoothAdapter;
+    Button searchButton;
+    TextView statusTextView;
+    BluetoothAdapter bluetoothAdapter;
+    ArrayList<String> blDevice = new ArrayList<String>();
     //static ArrayList<LatLng> locations = new ArrayList<LatLng>();
     //static ArrayList<Location> locations = new ArrayList<Location>();
+   /* private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Discovery has found a device. Get the BluetoothDevice
+                // object and its info from the Intent.
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+                Log.i("Bluetooth",deviceName+" "+ deviceHardwareAddress);
+            }
 
+        }
+    };
+*/
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+                searchButton.setEnabled(true);
+                statusTextView.setText("finished");
+                HashSet<String> hashSet = new HashSet<String>();
+                hashSet.addAll(blDevice);
+                DocumentReference documentReference = fStore.collection("ownerLocationData").document(userId);
+                final Map<String,Object> deviceCount = new HashMap<>();
+
+                deviceCount.put("count",hashSet.size());
+
+                documentReference.update(deviceCount).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG","count "+ userId + " "+ deviceCount);
+                        Toast.makeText(MainScreen.this,"count uploaded "+ userId + " "+ deviceCount,Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+                });
+                Toast.makeText(MainScreen.this,"Number of devices present  "+hashSet.size(),Toast.LENGTH_LONG).show();
+                searchButton.setEnabled(false);
+                statusTextView.setText("Searching...");
+                bluetoothAdapter.startDiscovery();
+
+                //unregisterReceiver(broadcastReceiver);
+
+            }
+            else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Discovery has found a device. Get the BluetoothDevice
+                // object and its info from the Intent.
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+                blDevice.add(deviceHardwareAddress);
+                Log.i("Bluetooth",deviceName+" "+ deviceHardwareAddress);
+            }
+        }
+    };
+
+    public void searchBluetooth(View view){
+        searchButton.setEnabled(false);
+        statusTextView.setText("Searching...");
+        userId = fAuth.getCurrentUser().getUid();
+        bluetoothAdapter.startDiscovery();
+
+    }
+
+   /* @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+        searchButton.setEnabled(true);
+        statusTextView.setText("Finished");
+
+    }
+    */
 
   /*  public void search(View view){
         Toast.makeText(this,"Searching for nearby owners",Toast.LENGTH_SHORT).show();
@@ -98,15 +183,25 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
         fStore= FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
-       /* bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        searchButton = findViewById(R.id.bluetoothButton);
+        statusTextView = findViewById(R.id.bluetoothSearchTextView);
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-       // intentFilter.addAction(BluetoothAdapter.ACTIO);
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        registerReceiver(broadcastReceiver,intentFilter);
 
 
-        bluetoothAdapter.startDiscovery();
-*/
+
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
+        //IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        //registerReceiver(receiver, filter);
+        //bluetoothAdapter.startDiscovery();
     }
 }

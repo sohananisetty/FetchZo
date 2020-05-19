@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,7 +35,7 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
     LocationManager locationManager;
     LocationListener locationListener;
     Location lastKnownLocation;
-    int searchRadius = 1000;
+    int searchRadius = 2000;
     Button searchButton;
 
     public void centerMapOnLocation(Location location, String title){
@@ -79,9 +80,22 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
                 lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                centerMapOnLocation(lastKnownLocation,getAddress(ownerLocation));
-
+                try {
+                    if(lastKnownLocation!=null) {
+                        LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                        centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                    }
+                    else{
+                        Toast.makeText(this,"Location NULL",Toast.LENGTH_SHORT).show();
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0, locationListener);
+                        lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                        centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                    }
+                }
+                catch(Exception e){
+                    e.printStackTrace();;
+                }
             }
         }
     }
@@ -92,9 +106,10 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
             //Toast.makeText(this,"adding marker " + i+"/"+MainScreen.locations.size(),Toast.LENGTH_SHORT).show();
             Log.i("TAG","adding marker " + i +"/"+ CustomerMainScreen.locations.size());
             //mMap.addMarker(new MarkerOptions().position(MainScreen.locations.get(i)).title(getAddress(MainScreen.locations.get(i))));
-            if(lastKnownLocation.distanceTo(CustomerMainScreen.locations.get(i)) < searchRadius){
-                mMap.addMarker(new MarkerOptions().position(ownerLocation).title(getAddress(ownerLocation)));
-            }
+           if(lastKnownLocation.distanceTo(CustomerMainScreen.locations.get(i)) < searchRadius){
+                //mMap.addMarker(new MarkerOptions().position(ownerLocation).title(getAddress(ownerLocation)));
+               mMap.addMarker(new MarkerOptions().position(ownerLocation).title(Long.toString(CustomerMainScreen.blCount.get(i))));
+           }
 
         }
 
@@ -108,7 +123,7 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        searchButton = findViewById(R.id.confirmButton);
+        searchButton = findViewById(R.id.searchButton);
 
 
 
@@ -152,8 +167,22 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
             lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Log.i("info","update_permission");
-            LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-            centerMapOnLocation(lastKnownLocation,getAddress(ownerLocation));
+            try {
+                if(lastKnownLocation!=null) {
+                    LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                    centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                }
+                else{
+                    Toast.makeText(this,"Location NULL",Toast.LENGTH_SHORT).show();
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0, locationListener);
+                    lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                    centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();;
+            }
         }
         else{
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);

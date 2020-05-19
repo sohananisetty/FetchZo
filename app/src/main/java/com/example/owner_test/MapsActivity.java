@@ -75,6 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     owner.put("address",ownerAddress);
                     ownerLocation.put("longitude",loc.longitude);
                     ownerLocation.put("latitude",loc.latitude);
+                   // ownerLocation.put("count",0);
                     //ownerLocation.put("location",loc);
                     documentReference.set(owner).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -151,8 +152,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
                 lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                centerMapOnLocation(lastKnownLocation,getAddress(ownerLocation));
+                try {
+                    if(lastKnownLocation!=null) {
+                        LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                        centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                    }
+                    else{
+                        Toast.makeText(this,"Location NULL",Toast.LENGTH_SHORT).show();
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0, locationListener);
+                        lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                        centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                    }
+                }
+                catch(Exception e){
+                    e.printStackTrace();;
+                }
 
             }
         }
@@ -207,8 +222,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
             lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Log.i("info","update_permission");
-            LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-            centerMapOnLocation(lastKnownLocation,getAddress(ownerLocation));
+            try {
+                if(lastKnownLocation!=null) {
+                    LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                    centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                }
+                else{
+                    Toast.makeText(this,"Location NULL",Toast.LENGTH_SHORT).show();
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0, locationListener);
+                    lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                    centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();;
+            }
         }
         else{
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
