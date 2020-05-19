@@ -16,7 +16,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,6 +34,8 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
     LocationManager locationManager;
     LocationListener locationListener;
     Location lastKnownLocation;
+    int searchRadius = 1000;
+    Button searchButton;
 
     public void centerMapOnLocation(Location location, String title){
         if (location != null ) {
@@ -85,20 +87,18 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
     }
 
     public void showNearest(View view){
-        for(int i=0;i<MainScreen.locations.size();i++) {
-            LatLng ownerLocation = new LatLng(MainScreen.locations.get(i).getLatitude(), MainScreen.locations.get(i).getLongitude());
+        for(int i=0;i<CustomerMainScreen.locations.size();i++) {
+            LatLng ownerLocation = new LatLng(CustomerMainScreen.locations.get(i).getLatitude(), CustomerMainScreen.locations.get(i).getLongitude());
             //Toast.makeText(this,"adding marker " + i+"/"+MainScreen.locations.size(),Toast.LENGTH_SHORT).show();
-            Log.i("TAG","adding marker " + i +"/"+ MainScreen.locations.size());
+            Log.i("TAG","adding marker " + i +"/"+ CustomerMainScreen.locations.size());
             //mMap.addMarker(new MarkerOptions().position(MainScreen.locations.get(i)).title(getAddress(MainScreen.locations.get(i))));
-            if(lastKnownLocation.distanceTo(MainScreen.locations.get(i)) < 1000){
+            if(lastKnownLocation.distanceTo(CustomerMainScreen.locations.get(i)) < searchRadius){
                 mMap.addMarker(new MarkerOptions().position(ownerLocation).title(getAddress(ownerLocation)));
             }
 
         }
+
     }
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +108,9 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        searchButton = findViewById(R.id.confirmButton);
+
+
 
 
 

@@ -1,4 +1,4 @@
-package com.example.owner_test;
+/*package com.example.owner_test;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -98,5 +98,34 @@ public class MainActivity extends AppCompatActivity {
         //}
 
 
+    }
+}
+*/
+package com.example.owner_test;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+        import android.content.Intent;
+        import android.os.Bundle;
+        import android.view.View;
+
+public class MainActivity extends AppCompatActivity {
+
+    public void ownerOnClick(View view){
+        Intent intent = new Intent(getApplicationContext(),OwnerLoginActivity.class);
+        startActivity(intent);
+    }
+
+    public void customerOnClick(View view){
+        Intent intent = new Intent(getApplicationContext(),LoginCustomer.class);
+        startActivity(intent);
+    }
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
     }
 }

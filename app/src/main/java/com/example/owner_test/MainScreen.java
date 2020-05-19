@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -39,11 +41,12 @@ public class MainScreen extends AppCompatActivity {
     FirebaseFirestore fStore;
     String userId;
     LatLng loc;
+    //BluetoothAdapter bluetoothAdapter;
     //static ArrayList<LatLng> locations = new ArrayList<LatLng>();
-    static ArrayList<Location> locations = new ArrayList<Location>();
+    //static ArrayList<Location> locations = new ArrayList<Location>();
 
 
-    public void search(View view){
+  /*  public void search(View view){
         Toast.makeText(this,"Searching for nearby owners",Toast.LENGTH_SHORT).show();
 
         fStore.collection("ownerLocationData").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -80,9 +83,11 @@ public class MainScreen extends AppCompatActivity {
 
     }
 
+   */
+
     public void goBack(View view){
         FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(),OwnerLoginActivity.class);
         startActivity(intent);
         finish();
     }
@@ -93,6 +98,15 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
         fStore= FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
+       /* bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+       // intentFilter.addAction(BluetoothAdapter.ACTIO);
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 
+
+        bluetoothAdapter.startDiscovery();
+*/
     }
 }
