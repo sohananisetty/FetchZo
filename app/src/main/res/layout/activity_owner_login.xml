@@ -53,21 +53,21 @@ tools:context=".OwnerLoginActivity">
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
 
-<Button
-    android:id="@+id/registerButton"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="4dp"
-    android:layout_marginEnd="16dp"
-    android:background="@color/colorAccent"
-    android:textColor="@android:color/white"
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/colorAccent"
+        android:onClick="register"
 
-    android:onClick="register"
-    android:text="register"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/loginButton" />
+        android:text="register"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
 <EditText
     android:id="@+id/emailEditText"
