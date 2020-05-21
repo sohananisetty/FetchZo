@@ -3,4 +3,28 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_customer_map">Map</string>
     <string name="title_activity_customer_login_map">Map</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="start">Fetch all the Items Safely</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="add_item">Add your item here</string>
+    <string name="title_activity_list">ListActivity</string>
+    <string name="groceryname">Groceryname</string>
+    <string name="qty">Qty</string>
+    <string name="date">Date:</string>
+    <string name="enter_item">Enter the Item</string>
+    <string name="hint_item">Enter the item</string>
+    <string name="quantity_hint">Enter the quantity</string>
+    <string name="save_title">Save</string>
+    <string name="sure_text">Are you Sure ?</string>
+    <string name="no">NO</string>
+    <string name="yes">Yes</string>
+    <string name="title_activity_details">DetailsActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="Scroll">Please Scroll</string>
+    <string name="title_activity_main" />
 </resources>

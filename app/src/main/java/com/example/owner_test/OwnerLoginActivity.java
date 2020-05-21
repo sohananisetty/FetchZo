@@ -49,7 +49,8 @@ public class OwnerLoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(OwnerLoginActivity.this,"User successfully login",Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(),MainScreen.class);
+                    //Intent intent = new Intent(getApplicationContext(),MainScreen.class);
+                    Intent intent = new Intent(getApplicationContext(),main.class);
                     startActivity(intent);
                     finish();
                 }
@@ -93,7 +94,10 @@ public class OwnerLoginActivity extends AppCompatActivity {
 
 
         if(fAuth.getCurrentUser() != null){
-          startActivity(new Intent(getApplicationContext(),MainScreen.class));
+          //startActivity(new Intent(getApplicationContext(),MainScreen.class));
+            //startService(new Intent(getApplicationContext(),BluetoothService.class));
+            startActivity(new Intent(getApplicationContext(),main.class));
+
 
         }
 

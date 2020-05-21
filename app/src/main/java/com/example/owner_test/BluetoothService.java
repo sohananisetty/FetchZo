@@ -114,15 +114,16 @@ public class BluetoothService extends Service {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("TAG","count "+ userId + " "+ deviceCount);
-                        Toast.makeText(BluetoothService.this,"count uploaded "+ userId + " "+ deviceCount,Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(BluetoothService.this,"count uploaded "+ userId + " "+ deviceCount,Toast.LENGTH_SHORT).show();
 
 
                     }
 
                 });
-                Toast.makeText(BluetoothService.this,"Number of devices present  "+hashSet.size(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(BluetoothService.this,"Number of devices present  "+hashSet.size(),Toast.LENGTH_LONG).show();
                 bluetoothAdapter.startDiscovery();
 
+                //
                 //unregisterReceiver(broadcastReceiver);
 
             }
