@@ -83,14 +83,14 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
                 try {
                     if(lastKnownLocation!=null) {
                         LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                        centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                        centerMapOnLocation(lastKnownLocation, "your location"/*getAddress(ownerLocation)*/);
                     }
                     else{
                         Toast.makeText(this,"Location NULL",Toast.LENGTH_SHORT).show();
                         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0, locationListener);
                         lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                        centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                        centerMapOnLocation(lastKnownLocation, "your location"/*getAddress(ownerLocation)*/);
                     }
                 }
                 catch(Exception e){
@@ -108,7 +108,7 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
             //mMap.addMarker(new MarkerOptions().position(MainScreen.locations.get(i)).title(getAddress(MainScreen.locations.get(i))));
            if(lastKnownLocation.distanceTo(CustomerMainScreen.locations.get(i)) < searchRadius){
                 //mMap.addMarker(new MarkerOptions().position(ownerLocation).title(getAddress(ownerLocation)));
-               mMap.addMarker(new MarkerOptions().position(ownerLocation).title(Long.toString(CustomerMainScreen.blCount.get(i))));
+               mMap.addMarker(new MarkerOptions().position(ownerLocation).title("Number of customers - "+Long.toString(CustomerMainScreen.blCount.get(i))));
            }
 
         }
@@ -177,7 +177,7 @@ public class CustomerMapActivity extends FragmentActivity implements OnMapReadyC
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0, locationListener);
                     lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     LatLng ownerLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                    centerMapOnLocation(lastKnownLocation, getAddress(ownerLocation));
+                    centerMapOnLocation(lastKnownLocation, "your location"/*getAddress(ownerLocation)*/);
                 }
             }
             catch(Exception e){

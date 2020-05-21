@@ -51,7 +51,7 @@ public class MainScreen extends AppCompatActivity {
     Button searchButton;
     TextView statusTextView;
     BluetoothAdapter bluetoothAdapter;
-    ArrayList<String> blDevice = new ArrayList<String>();
+   // ArrayList<String> blDevice = new ArrayList<String>();
     //static ArrayList<LatLng> locations = new ArrayList<LatLng>();
     //static ArrayList<Location> locations = new ArrayList<Location>();
    /* private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -69,7 +69,7 @@ public class MainScreen extends AppCompatActivity {
         }
     };
 */
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+   /*BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -112,12 +112,14 @@ public class MainScreen extends AppCompatActivity {
             }
         }
     };
-
+*/
     public void searchBluetooth(View view){
         searchButton.setEnabled(false);
         statusTextView.setText("Searching...");
-        userId = fAuth.getCurrentUser().getUid();
-        bluetoothAdapter.startDiscovery();
+        //userId = fAuth.getCurrentUser().getUid();
+        //bluetoothAdapter.startDiscovery();
+        startService(new Intent(getApplicationContext(),BluetoothService.class));
+
 
     }
 
@@ -171,8 +173,8 @@ public class MainScreen extends AppCompatActivity {
    */
 
     public void goBack(View view){
-        FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getApplicationContext(),OwnerLoginActivity.class);
+        //FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getApplicationContext(),StockActivity.class);
         startActivity(intent);
         finish();
     }
@@ -181,10 +183,11 @@ public class MainScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-        fStore= FirebaseFirestore.getInstance();
-        fAuth = FirebaseAuth.getInstance();
         searchButton = findViewById(R.id.bluetoothButton);
         statusTextView = findViewById(R.id.bluetoothSearchTextView);
+        /*fStore= FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
@@ -203,5 +206,7 @@ public class MainScreen extends AppCompatActivity {
         //IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         //registerReceiver(receiver, filter);
         //bluetoothAdapter.startDiscovery();
+        */
+
     }
 }
