@@ -49,7 +49,7 @@ public class LoginCustomer extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(LoginCustomer.this,"User successfully login",Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(),CustomerMainScreen.class);
+                    Intent intent = new Intent(getApplicationContext(),CustomerProductPage.class);
                     startActivity(intent);
                     finish();
                 }
@@ -94,7 +94,7 @@ public class LoginCustomer extends AppCompatActivity {
         });
 
 
-        Intent intent = new Intent(getApplicationContext(),CustomerMainScreen.class);
+        Intent intent = new Intent(getApplicationContext(),CustomerProductPage.class);
         startActivity(intent);
         finish();
 
@@ -117,7 +117,7 @@ public class LoginCustomer extends AppCompatActivity {
 
 
         if(fAuth.getCurrentUser() != null){
-          startActivity(new Intent(getApplicationContext(),CustomerMainScreen.class));
+          startActivity(new Intent(getApplicationContext(),CustomerProductPage.class));
 
         }
 
