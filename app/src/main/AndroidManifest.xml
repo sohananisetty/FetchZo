@@ -5,7 +5,12 @@
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
+
     -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -23,14 +28,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CustomerProductPage"></activity>
-        <activity android:name=".StockActivity" />
-
         <service
             android:name=".BluetoothService"
             android:enabled="true"
             android:exported="true"
             android:stopWithTask="true" />
+
+        <activity android:name=".CustomerProductPage"></activity>
+        <activity android:name=".StockActivity" />
+
+
+
+
 
         <activity android:name=".OwnerLoginActivity" />
         <!--

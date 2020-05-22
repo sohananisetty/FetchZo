@@ -114,17 +114,19 @@ public class BluetoothService extends Service {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("TAG","count "+ userId + " "+ deviceCount);
-                       // Toast.makeText(BluetoothService.this,"count uploaded "+ userId + " "+ deviceCount,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BluetoothService.this,"count uploaded "+ userId + " "+ deviceCount,Toast.LENGTH_SHORT).show();
+                        //bluetoothAdapter.startDiscovery();
+
 
 
                     }
 
                 });
-                //Toast.makeText(BluetoothService.this,"Number of devices present  "+hashSet.size(),Toast.LENGTH_LONG).show();
+                Toast.makeText(BluetoothService.this,"Number of devices present  "+hashSet.size(),Toast.LENGTH_LONG).show();
+               // unregisterReceiver(broadcastReceiver);
                 bluetoothAdapter.startDiscovery();
 
                 //
-                //unregisterReceiver(broadcastReceiver);
 
             }
             else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
@@ -166,12 +168,11 @@ public class BluetoothService extends Service {
         //msg.arg1 = startId;
         //serviceHandler.sendMessage(msg);
 
-        try {
+       try {
             bluetoothAdapter.startDiscovery();
-
             Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+           e.printStackTrace();
         }
 
         return START_STICKY;
@@ -185,13 +186,13 @@ public class BluetoothService extends Service {
     public void onDestroy() {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
-   /* @Override
+    /*@Override
     public void onTaskRemoved(Intent rootIntent) {
         Intent restartServiceIntent = new Intent(getApplicationContext(),this.getClass());
         restartServiceIntent.setPackage(getPackageName());
         startService(restartServiceIntent);
         super.onTaskRemoved(rootIntent);
-    }
-*/
+    }*/
+
 
 }

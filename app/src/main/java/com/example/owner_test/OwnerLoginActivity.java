@@ -93,13 +93,13 @@ public class OwnerLoginActivity extends AppCompatActivity {
 
 
 
-        if(fAuth.getCurrentUser() != null){
+        /*if(fAuth.getCurrentUser() != null){
           //startActivity(new Intent(getApplicationContext(),MainScreen.class));
             //startService(new Intent(getApplicationContext(),BluetoothService.class));
             startActivity(new Intent(getApplicationContext(),main.class));
 
 
-        }
+        }*/
 
 
     }

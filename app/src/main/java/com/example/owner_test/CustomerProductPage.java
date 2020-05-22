@@ -3,11 +3,15 @@ package com.example.owner_test;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,13 +19,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.owner_test.Model.ProductModel;
 import com.example.owner_test.View.CartActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class CustomerProductPage extends AppCompatActivity implements com.example.owner_test.Adapter.ProductAdapter.CallBackUs, com.example.owner_test.Adapter.ProductAdapter.HomeCallBack {
 
     public static ArrayList<ProductModel> arrayList = new ArrayList<>();
+    public static ArrayList<String> items = new ArrayList<String>();
+    public static ArrayList<Long> quantity = new ArrayList<Long>();
+    public static Map<String,Object> stock = new HashMap<>();
+
     public static int cart_count = 0;
+    FirebaseFirestore fStore;
     com.example.owner_test.Adapter.ProductAdapter productAdapter;
     RecyclerView productRecyclerView;
 
@@ -29,6 +47,8 @@ public class CustomerProductPage extends AppCompatActivity implements com.exampl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_product_page);
+        fStore = FirebaseFirestore.getInstance();
+        //linkDatabase();
 
         addProduct();
         productAdapter = new com.example.owner_test.Adapter.ProductAdapter(arrayList, this, this);
@@ -41,33 +61,86 @@ public class CustomerProductPage extends AppCompatActivity implements com.exampl
 
     }
 
+    public void linkDatabase(){
+        fStore.collection("OwnerStock").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(document.exists() && document!=null) {
+                            //String item_name = document.getString("apple");
+                            long qty = document.getLong("Apple");
+                            long qty2 = document.getLong("Banana");
+                            if(document.getLong("Apple") != null){
+                               items.add("apple");
+                               quantity.add(qty);
+                               stock.put("apple",qty);
+                            }
+                            else{
+                                Toast.makeText(CustomerProductPage.this,"Fail",Toast.LENGTH_SHORT).show();
+                            }
+                            if(document.getLong("Banana") != null){
+                                items.add("banana");
+                                quantity.add(qty2);
+                                stock.put("banana",qty);
+                            }
+                            else{
+                                Toast.makeText(CustomerProductPage.this,"Fail",Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }
+
+                } else {
+                    Log.i("TAG", "Error getting documents: ");
+                }
+            }
+        });
+
+
+
+    }
+
 
     private void addProduct() {
-        ProductModel productModel = new ProductModel("Bag", "10", "20", R.drawable.bag);
-        arrayList.add(productModel);
-        ProductModel productModel1 = new ProductModel("Shoe", "20", "10", R.drawable.shoe);
+        fStore.collection("OwnerStock").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(document.exists() && document!=null) {
+                            //String item_name = document.getString("apple");
+                            long qty = document.getLong("Apple");
+                            long qty2 = document.getLong("Banana");
+                            if(document.getLong("Apple") != null){
+                                items.add("apple");
+                                quantity.add(qty);
+                           }
+                            else{
+                                Toast.makeText(CustomerProductPage.this,"Fail",Toast.LENGTH_SHORT).show();
+                            }
+                            if(document.getLong("Banana") != null){
+                                items.add("banana");
+                                quantity.add(qty2);
+                                stock.put("banana",qty);
+                            }
+                            else{
+                                Toast.makeText(CustomerProductPage.this,"Fail",Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }
+
+                } else {
+                    Log.i("TAG", "Error getting documents: ");
+                }
+            }
+        });
+
+        ProductModel productModel1 = new ProductModel(items.get(0), "20", "10", R.drawable.grocery);
         arrayList.add(productModel1);
-        ProductModel productModel2 = new ProductModel("Springroll", "30", "10", R.drawable.springrolls);
+        ProductModel productModel2 = new ProductModel(items.get(0), "20","20", R.drawable.grocery);
         arrayList.add(productModel2);
-
-        ProductModel productModel3 = new ProductModel("burger", "40", "20", R.drawable.burger);
-        arrayList.add(productModel3);
-        ProductModel productModel12 = new ProductModel("chicken", "50", "10", R.drawable.chicken);
-        arrayList.add(productModel12);
-        ProductModel productModel23 = new ProductModel("colddrink", "60", "10", R.drawable.colddrink);
-        arrayList.add(productModel23);
-
-        ProductModel productModel4 = new ProductModel("momos", "70", "20", R.drawable.momos);
-        arrayList.add(productModel4);
-        ProductModel productModel14 = new ProductModel("noodles", "80", "10", R.drawable.noodles);
-        arrayList.add(productModel14);
-        ProductModel productModel25 = new ProductModel("pizza", "90", "10", R.drawable.pizza);
-        arrayList.add(productModel25);
-
-        ProductModel productModel5 = new ProductModel("roll", "100", "20", R.drawable.roll);
-        arrayList.add(productModel5);
-        ProductModel productModel16 = new ProductModel("sandwich", "200", "10", R.drawable.sandwich);
-        arrayList.add(productModel16);
 
     }
 
